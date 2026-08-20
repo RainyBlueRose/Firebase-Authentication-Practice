@@ -1,8 +1,17 @@
 import React from "react";
 import { Container, Navbar, Nav } from "react-bootstrap";
 import { Link } from "react-router-dom";
+import { auth } from "../../firebase";
+import { useNavigate } from "react-router-dom";
+import { signOut } from "firebase/auth";
 
 const Header = () => {
+  const navigate = useNavigate();
+
+  const handleLogout = () => {
+    signOut(auth);
+    navigate("/");
+  };
   return (
     <Navbar className="bg-body-tertiary">
       <Container>
@@ -18,6 +27,7 @@ const Header = () => {
           <Nav.Link as={Link} to={"login"}>
             Login
           </Nav.Link>
+          <Nav.Link onClick={handleLogout}>Logout</Nav.Link>
         </Navbar.Collapse>
       </Container>
     </Navbar>
