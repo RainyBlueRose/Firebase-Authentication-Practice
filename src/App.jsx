@@ -23,17 +23,18 @@ const App = () => {
         try {
           const res = await currentUser(idToken.token);
           console.log("res", res);
+
+          // go Redux
+          dispatch(
+            login({
+              email: res.data.email,
+              name: res.data.name,
+              token: idToken.token,
+            }),
+          );
         } catch (err) {
           console.log("err", err);
         }
-
-        // go Redux
-        dispatch(
-          login({
-            email: user.email,
-            token: idToken.token,
-          }),
-        );
       }
     });
 
