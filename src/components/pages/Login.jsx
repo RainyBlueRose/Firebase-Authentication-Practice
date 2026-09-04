@@ -1,26 +1,14 @@
 import React from "react";
 import { Container, Button } from "react-bootstrap";
-import axios from "axios";
 import { auth, googleAuthProvider } from "../../firebase";
 import { signInWithPopup } from "firebase/auth";
 import { useSelector, useDispatch } from "react-redux";
 import { login, logout } from "../../store/userSlice";
+import { createAndUpdateUser } from "../functions/auth";
 
 const Login = () => {
   const currentUser = useSelector((state) => state.user);
   const dispatch = useDispatch();
-
-  const createAndUpdateUser = async (authToken) => {
-    return axios.post(
-      `${import.meta.env.VITE_APP_API}/auth`,
-      {},
-      {
-        headers: {
-          authToken,
-        },
-      },
-    );
-  };
 
   const handleLoginByGoogle = async () => {
     const result = await signInWithPopup(auth, googleAuthProvider);
@@ -32,7 +20,15 @@ const Login = () => {
 
     try {
       const res = await createAndUpdateUser(idToken.token);
-      console.log("res", res);
+      console.log(res);
+      dispatch(
+        login({
+          email: res.data.email,
+          name: res.data.name,
+          role: res.data.role,
+          token: idToken.token,
+        }),
+      );
     } catch (err) {
       console.log("err", err);
     }
