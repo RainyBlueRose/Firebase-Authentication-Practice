@@ -11,3 +11,15 @@ export const createAndUpdateUser = async (authToken) => {
     },
   );
 };
+
+export const currentUser = async (authToken) => {
+  return axios.post(
+    `${import.meta.env.VITE_APP_API}/current-user`,
+    {},
+    {
+      headers: {
+        authToken,
+      },
+    },
+  );
+};
